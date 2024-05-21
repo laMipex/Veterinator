@@ -1,0 +1,372 @@
+@import url('https://fonts.googleapis.com/css2?family=Madimi+One&display=swap');
+
+* {
+    font-family: "Madimi One", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    box-sizing: border-box;
+}
+
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background:white
+}
+
+::-webkit-scrollbar-thumb {
+    background: #353535;
+    border-radius: 16px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+@keyframes content_reveal {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+body, html {
+    animation: content_reveal 0.8s ease;
+}
+
+nav {
+    z-index: 100;
+}
+
+.logo {
+    margin-top: 10px !important; 
+    width: 80px !important;
+    height: 80px !important;
+}
+
+.navbar {
+    background-color: transparent;
+    font-size: 30px;
+    margin-top: -20px;
+}
+
+.navbar-nav, .btn {
+    margin-top: 20px !important;
+}
+
+.navbar.center .navbar-inner {
+    text-align: center;
+}
+
+.navbar .navbar-nav .nav-link {
+    color: white !important;
+}
+
+.parallax {
+    background-image: url("../index_photos/dac.jpg");
+    /* background-attachment: fixed; */
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    max-width: 100%;
+    height: 113vh;
+    position: relative;
+    margin-top: -90px;
+    z-index: 10;
+}
+
+.parallax > div {
+    position: relative;
+    top: 0;
+    left: 0;
+    right: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    width: 100%;
+    height: 100%;
+}
+
+.headerBox {
+    position: relative;
+    width: 100%; 
+    max-width: 100%; 
+    margin: 0 auto; 
+}
+
+.pText {
+    position: absolute;
+    color: white;
+    font-size: 55px;
+    font-weight: bolder;
+    top: 370px;
+    left: 5%;
+    text-transform: uppercase;
+    line-height: 100%;
+}
+
+.btnF {
+    position: absolute !important;
+    top: 480px;
+    left: 6.4%;
+    z-index: 1000;
+}
+
+.bd {
+    padding-top: 30px;
+    margin:0 auto;
+    background-color: white;
+    width:70%;
+}
+
+.dH {
+    margin-top: 130px;
+}
+
+.section {
+    display: flex;
+    justify-content: center;
+    padding: 40px;
+    width: 100%;
+    margin: 2rem auto 0 auto;
+}
+
+.section  {
+    height: 450px;
+}
+
+.section h1 {
+    margin: 0;
+}
+
+.section p {
+    margin-right: 15px;
+}
+
+.dImg {
+    border-radius: 26px;
+}
+
+.container {
+    margin-bottom: 250px;
+}
+
+.wave {
+    position: absolute;
+    bottom: 0;
+    height: 12%;
+    left: 0;
+    width: 100%;
+}
+
+.footer {
+    border-top: 2px solid black;
+    max-width: 100%;
+    background-color: white;
+}
+
+
+.footer .footer-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 13.5rem;
+    padding: 20px 0px 5px;
+    color: black;
+    font-size: 1rem;
+}
+
+h4 {
+    color: black;
+    font-size: 1.2rem;
+    font-weight: bolder;
+}
+
+.footer-col .links {
+    margin-top: 20px;
+}
+
+.footer-col .links li {
+    list-style: none;
+    margin-bottom: 5px;
+    margin-left: -30px;
+}
+
+.links > li > a {
+    color: black;
+    text-decoration: none;
+}
+
+.footer-col .links li > a:hover {
+    color: rgb(66, 66, 66);
+    text-decoration: underline;
+    transition: 0.3s ease;
+}
+
+.copyright {
+    text-align: center;
+}
+
+.unclickable {
+    pointer-events: none;
+}
+
+.dropdown-menu {
+    animation: .3s slideup ease, content_reveal 0.6s ease;
+}
+
+.dropdown-item {
+    font-size: 25px;
+    transition: transform 0.3s ease;
+}
+
+.dropdown-item:hover {
+    transform: scale(1.2);
+    border-radius: 6px;
+}
+
+.navbar .navbar-nav .nav-link:hover {
+    color: #b1b1b1 !important; 
+}
+
+#btnS {
+    transition: transform 0.3s ease;
+}
+
+#btnS:hover {
+    transform: scale(1.2);
+}
+
+@keyframes slideup {
+    from {
+        transform: translateY(10%);
+    }
+    to {
+        transform: translateY(0%);
+    }
+}
+
+.appDiv {
+    margin-top: 100px;
+}
+
+.pawImg {
+    width: 350px !important;
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 100%;
+    display: block;
+    transform: rotate(-25deg);
+    transition: transform 0.3s ease;
+}
+
+.pawText {
+    padding-top: 120px; 
+    text-align: center; 
+}
+
+.pawImg:hover {
+    transform: scale(1.2);
+}
+
+.btnSend {
+    scale: 1.5 !important;
+    width: 100px !important;
+    border-radius: 20px !important;
+    background-color: #263072 !important;
+    border: #263072 !important;
+    transition: scale .3s ease !important;
+}
+
+.btnSend:hover {
+    scale: 1.7 !important;
+}
+
+
+@media screen and (max-width: 440px) {
+    .pText {
+        top: 310px;
+        font-size: 45px;
+    }
+}
+
+@media screen and (max-width: 793px) {
+    .footer .footer-row {
+        padding: 20px;
+        gap: 6rem;
+    }
+}
+
+@media screen and (max-width: 766px) {
+    .navbar {
+        background-color: white;
+    }
+    .navbar .navbar-nav .nav-link {
+        color: black !important;
+    }
+    .navbar-toggler {
+        margin-top: 13px;
+    }
+    #btnS {
+        border-color: #343a40 !important;
+        color: #343a40 !important;
+    }
+    .dropdown-item:hover {
+        transform: scale(1);
+        border-radius: 6px;
+    }
+    .navbar .navbar-nav .nav-link:hover {
+        color: #000000 !important; 
+    }
+    .btnF {
+        left: 9.4% !important;
+    } 
+}
+
+@media screen and (max-width: 754px) {
+    .btnF {
+        top: 520px;
+    }
+    .appDiv {
+        padding-top: 100px !important;
+    }
+}
+
+@media screen and (max-width: 9640px) {
+    .pawText {
+        padding-top: 70px;
+    }
+}
+
+@media only screen and (max-width: 998px) {
+    .pText {
+        line-height: 100%;
+    }
+
+}
+
+@media only screen and (max-width: 10040px) {
+    .pText {
+        margin-left: 20px;
+    }
+    .btnF {
+        margin-left: 20px;
+    }
+}
+
+@media screen and (max-width: 1200px) {
+    .section{
+        flex-wrap: wrap;
+        text-align: center;
+        margin-bottom: 300px;
+    }
+    .appDiv {
+        padding-top: 150px !important;
+    }
+    .btnF {
+        left: 7.4%;
+    }
+    
+}
+
