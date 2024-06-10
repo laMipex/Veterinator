@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-md">
     <div class="container-fluid">
-        <img class="logo" src="index_photos/vet.png" alt="logo">
+        <img class="logo" src="photos/index_photos/vet.png" alt="logo">
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar" aria-controls="collapsibleNavbar" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>

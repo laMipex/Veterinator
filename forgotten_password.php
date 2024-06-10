@@ -13,7 +13,7 @@ ob_start();
     <meta name="description" content="Veterinary Practice">
     <meta name="keyword" content="animals, care, Veterinary">
     <meta name="robots" content="index, follow">
-    <link rel="icon" type="image/x-icon" href="index_photos/icon.png">
+    <link rel="icon" type="image/x-icon" href="photos/index_photos/icon.png">
     <link rel="stylesheet" href="styless/navBar.css">
     <link rel="stylesheet" href="styless/logIn.css">
     <link rel="stylesheet" href="styless/hover-min.css">
@@ -22,16 +22,7 @@ ob_start();
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous">
     </script>
-    <script>
-        function myFunction() {
-            var x = document.getElementById("password");
-            if (x.type === "password") {
-                x.type = "text";
-            } else {
-                x.type = "password";
-            }
-        }
-    </script>
+
 </head>
 <body data-bs-spy="scroll" data-bs-target=".navbar" data-bs-offset="50">
 

@@ -13,7 +13,7 @@ require "parts/functions.php";
     <meta name="description" content="Veterinary Practice">
     <meta name="keyword" content="animals, care, Veterinary">
     <meta name="robots" content="index, follow">
-    <link rel="icon" type="image/x-icon" href="index_photos/icon.png">
+    <link rel="icon" type="image/x-icon" href="photos/index_photos/icon.png">
     <link rel="stylesheet" href="styless/navBar.css">
     <link rel="stylesheet" href="styless/logIn.css">
     <link rel="stylesheet" href="styless/hover-min.css">
@@ -27,6 +27,17 @@ require "parts/functions.php";
 
 </head>
 <body data-bs-spy="scroll" data-bs-target=".navbar" data-bs-offset="50">
+
+
+
+<?php
+$id_admin = $_SESSION['id_admin'] ?? "";
+$id_user = $_SESSION['id_user'] ?? "";
+$id_vet = $_SESSION['id_vet'] ?? "";
+getNavbar($id_user,$id_admin,$id_vet);
+?>
+
+
 
 <?php
 if (isset($_GET['token'])) {
@@ -149,6 +160,10 @@ if (isset($_GET["rf"]) and is_numeric($_GET['rf'])) {
 }
 
 
+?>
+
+<?php
+include "parts/footer.php";
 ?>
 </body>
 </html>

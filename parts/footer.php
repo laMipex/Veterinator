@@ -26,8 +26,8 @@
                 <li><a href="#">One</a></li>
                 <li><a href="#">Two</a></li>
                 <li><a href="#">Three</a></li>
-                <li><a href="#">Four</a></li>
-                <li><a href="#">Five</a></li>
+                <li><a href="vet_signin.php">Register as vet</a></li>
+                <li><a href="admin_signin.php">Register as admin</a></li>
             </ul>
         </div>
     </div>

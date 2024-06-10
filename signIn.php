@@ -16,7 +16,7 @@ require "parts/functions.php";
     <meta name="description" content="Veterinary Practice">
     <meta name="keyword" content="animals, care, Veterinary">
     <meta name="robots" content="index, follow">
-    <link rel="icon" type="image/x-icon" href="index_photos/icon.png">
+    <link rel="icon" type="image/x-icon" href="photos/index_photos/icon.png">
     <link rel="stylesheet" href="styless/navBar.css">
     <link rel="stylesheet" href="styless/logIn.css"
     <link rel="stylesheet" href="styless/hover-min.css">
@@ -34,59 +34,16 @@ require "parts/functions.php";
 <body data-bs-spy="scroll" data-bs-target=".navbar" data-bs-offset="50">
 
 <?php
-
+$id_admin = $_SESSION['id_admin'] ?? "";
 $id_user = $_SESSION['id_user'] ?? "";
-getNavbar($id_user);
+$id_vet = $_SESSION['id_vet'] ?? "";
+getNavbar($id_user,$id_admin,$id_vet);
+$action = "signIn.php";
+echo '<h1>Register as User</h1>';
+include_once "parts/signinForm.php"
 ?>
 
-<div class="container">
-    <br><br>
-    <h1 class="text-center my-5">Sign Up</h1>
-    <form method="post" action="signIn.php" id="registerForm" class="col-8 col-sm-8 col-md-6 col-lg-5 col-xl-4 mx-auto mt-4" >
-        <div class="mb-3">
-            <label for="registerFirstname" class="form-label">First name</label>
-            <input type="text" name="firstname" class="form-control" id="registerFirstname" placeholder="John">
-            <small></small>
-        </div>
-        <div class="mb-3">
-            <label for="registerLastname" class="form-label">Last name</label>
-            <input type="text" name="lastname" class="form-control" id="registerLastname" placeholder="Dow">
-            <small></small>
-        </div>
-        <div class="mb-3">
-            <label for="registerEmail" class="form-label">Email Address</label>
-            <input type="email" name="email" class="form-control" id="registerEmail" aria-describedby="emailHelp" placeholder="example@mail.com">
-            <small></small>
-        </div>
-       <div class="mb-3">
-            <label for="phone" class="form-label">Phone</label>
-            <input type="text" name="phone" class="form-control" id="phone">
-           <small></small>
-        </div>
-        <div class="mb-3 field">
-            <label for="registerPassword" class="form-label">Password <i class="bi bi-eye-slash-fill"
-                                                                         id="passwordEye"></i></label>
-            <input type="password" class="form-control passwordVisibiliy" name="password" id="registerPassword"
-                   placeholder="Password (min 8 characters)">
-            <small></small>
-            <span id="strengthDisp" class="badge displayBadge mt-3">Weak</span>
-        </div>
-        <div class="mb-3">
-            <label for="registerPasswordConfirm" class="form-label">Cofirm Password:</label>
-            <input type="password" name="passwordConfirm" class="form-control" id="registerPasswordConfirm">
-            <small></small>
-           <!-- <input type="checkbox"  class="mt-3">Show Password-->
-        </div>
 
-
-        <div class="mb-5 text-center mt-5">
-           <!-- <input type="hidden" name="action" value="register">-->
-            <button type="submit"  class="btn btnSend btn-primary text-center">Sign Up</button>
-            <button type="reset" class="btn btn-primary btnSend ms-5 resetButton" >Cancel</button>
-            <small></small>
-        </div>
-    </form>
-</div>
 
 <?php
 

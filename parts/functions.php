@@ -14,10 +14,17 @@ $pdo = connectDatabase($dsn, $pdoOptions);
 $GLOBALS['pdo'] = $pdo;
 
 
-function getNavbar(string $id_user) {
+function getNavbar(string $id_user,string $id_admin,string $id_vet) {
     if(isset($id_user) && !empty($id_user)){
         include_once "nav_user.php";
-    }else {
+    }
+    elseif (isset($id_admin) && !empty($id_admin)){
+        include_once "nav_admin.php";
+    }
+    elseif (isset($id_vet) && !empty($id_vet)){
+        include_once "nav_vet.php";
+    }
+    else {
         include_once "nav_guest.php";
     }
 }
@@ -198,5 +205,123 @@ function setForgottenToken(PDO $pdo, string $email, string $token): void
     $stmt->bindParam(':email', $email, PDO::PARAM_STR);
     $stmt->execute();
 }
+
+function existsAdmin(PDO $pdo, string $email): bool
+{
+
+    $sql = "SELECT id_admin FROM admin WHERE email=:email AND (registration_expires>now() OR active ='1') LIMIT 0,1";
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindParam(':email', $email, PDO::PARAM_STR);
+    $stmt->execute();
+    $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if ($stmt->rowCount() > 0) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+function registerAdmin(PDO $pdo, string $password, string $firstname, string $lastname, string $email, string $token): int
+{
+
+    $passwordHashed = password_hash($password, PASSWORD_DEFAULT);
+
+    $sql = "INSERT INTO admin(password,firstname,lastname,email,registration_token, registration_expires,active)
+            VALUES (:passwordHashed,:firstname,:lastname,:email,:token,DATE_ADD(now(),INTERVAL 1 DAY),0)";
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindParam(':passwordHashed', $passwordHashed, PDO::PARAM_STR);
+    $stmt->bindParam(':firstname', $firstname, PDO::PARAM_STR);
+    $stmt->bindParam(':lastname', $lastname, PDO::PARAM_STR);
+    $stmt->bindParam(':email', $email, PDO::PARAM_STR);
+    $stmt->bindParam(':token', $token, PDO::PARAM_STR);
+    $stmt->execute();
+
+    return $pdo->lastInsertId();
+
+}
+
+function checkAdminLogin(string $email, string $enteredPassword): array
+{
+    $sql = "SELECT id_admin, password FROM admin WHERE email=:email AND active=1 LIMIT 0,1";
+    $stmt = $GLOBALS['pdo']->prepare($sql);
+    $stmt->bindParam(':email', $email, PDO::PARAM_STR);
+
+    $data = [];
+    $stmt->execute();
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if ($stmt->rowCount() > 0) {
+
+        $registeredPassword = $result['password'];
+
+        if (password_verify($enteredPassword, $registeredPassword)) {
+            $data['id_admin'] = $result['id_admin'];
+        }
+    }
+
+    return $data;
+}
+
+function existsVet(PDO $pdo, string $email): bool
+{
+
+    $sql = "SELECT id_vet FROM vet WHERE vet_email=:email AND (registration_expires>now() OR active ='1') LIMIT 0,1";
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindParam(':email', $email, PDO::PARAM_STR);
+    $stmt->execute();
+    $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if ($stmt->rowCount() > 0) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+function registerVet(PDO $pdo, string $password, string $firstname, string $lastname,string $phone, string $email, string $token): int
+{
+
+    $passwordHashed = password_hash($password, PASSWORD_DEFAULT);
+
+    $sql = "INSERT INTO vet(vet_password,vet_fname,vet_lname,vet_phone,vet_email,registration_token, registration_expires,active)
+            VALUES (:passwordHashed,:firstname,:lastname,:phone,:email,:token,DATE_ADD(now(),INTERVAL 1 DAY),0)";
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindParam(':passwordHashed', $passwordHashed, PDO::PARAM_STR);
+    $stmt->bindParam(':firstname', $firstname, PDO::PARAM_STR);
+    $stmt->bindParam(':lastname', $lastname, PDO::PARAM_STR);
+    $stmt->bindParam(':phone', $phone, PDO::PARAM_STR);
+    $stmt->bindParam(':email', $email, PDO::PARAM_STR);
+    $stmt->bindParam(':token', $token, PDO::PARAM_STR);
+    $stmt->execute();
+
+    return $pdo->lastInsertId();
+
+}
+
+function checkVetLogin(string $email, string $enteredPassword): array
+{
+    $sql = "SELECT id_vet, vet_password FROM vet WHERE vet_email=:email AND active=1 AND is_banned = 0 LIMIT 0,1";
+    $stmt = $GLOBALS['pdo']->prepare($sql);
+    $stmt->bindParam(':email', $email, PDO::PARAM_STR);
+
+    $data = [];
+    $stmt->execute();
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if ($stmt->rowCount() > 0) {
+
+        $registeredPassword = $result['vet_password'];
+
+        if (password_verify($enteredPassword, $registeredPassword)) {
+            $data['id_vet'] = $result['id_vet'];
+        }
+    }
+
+    return $data;
+}
+
+
+
 
 

@@ -17,13 +17,15 @@ $pdoOptions = [
 ];
 
 
-const SITE = 'http://localhost/wp_2024_2/Veterinator-main/';
+const SITE = 'http://localhost/wp_2024_3/Veterinator-main/';
+
+$actions = ['insert', 'update', 'delete'];
 
 
 $messages = [
     0 => 'No direct access!',
     1 => 'Unknown user!',
-    2 => 'User with this name already exists, choose another one!',
+    2 => 'User with this email already exists, choose another one!',
     3 => 'Check your email to active your account!',
     4 => 'Fill all the fields!',
     5 => 'You are logged out!!',
@@ -39,7 +41,17 @@ $messages = [
     15 => 'Token or other data are invalid!',
     16 => 'Your new password is set and you can <a href="logIn.php" class="text-white">login</a>',
     17 => 'Your login is successful!',
-    18 => 'It\'s an example email'
+    18 => 'It\'s an example email',
+    19 => 'Successfully deleted',
+    20 => 'Deleting failed',
+    21 => 'Something went wrong during file upload!',
+    22 => 'File is not a picture!!',
+    23 => 'Error',
+    24=> 'File with this name already exists!',
+    25 =>'Update successfull!',
+    26 => 'Update failed!',
+    27 => 'Insert successfull!',
+    28=> 'Insert failed!'
 
 ];
 
@@ -51,5 +63,14 @@ $emailMessages = [
     'forgotten_password' => [
         'subject' => 'Forgotten password - create new password',
         'altBody' => 'This is the body in plain text for non-HTML mail clients'
-    ]
+    ],
+    'admin_signIn' => [
+    'subject' => 'Register on web site as Admin',
+    'altBody' => 'This is the body in plain text for non-HTML mail clients'
+    ],
+    'vet_signIn' => [
+        'subject' => 'Register on web site as Veterinarian',
+        'altBody' => 'This is the body in plain text for non-HTML mail clients'
+    ],
+
 ];

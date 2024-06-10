@@ -1,3 +1,4 @@
+
 <nav class="navbar navbar-expand-md">
     <div class="container-fluid">
         <img class="logo" src="photos/index_photos/vet.png" alt="logo">
@@ -10,14 +11,13 @@
                     <a class="nav-link active" aria-current="page" href="index.php">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="services_description.php">Services</a>
+                    <a class="nav-link active" aria-current="page" href="admin_services_description.php">Services</a>
                 </li>
+
                 <li class="nav-item">
                     <a class="nav-link" href="contact.php">Contact</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="pets.php">Pet</a>
-                </li>
+
             </ul>
             <ul class="navbar-nav mb-2 mb-ls-0">
 
@@ -26,7 +26,6 @@
                         Profile
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                        <li><a class="dropdown-item" href="edit_user.php">Edit profile</a></li>
                         <li><a class="dropdown-item" href="logout.php">Log out</a></li>
                     </ul>
                 </li>

@@ -15,7 +15,7 @@ require_once "db_config.php";
   <meta name="description" content="Veterinary Practice">
   <meta name="keyword" content="animals, care, Veterinary">
   <meta name="robots" content="index, follow">
-  <link rel="icon" type="image/x-icon" href="index_photos/icon.png">
+  <link rel="icon" type="image/x-icon" href="photos/index_photos/icon.png">
   <link rel="stylesheet" href="styless/style.css">
   <link rel="stylesheet" href="styless/hover-min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
@@ -29,9 +29,10 @@ require_once "db_config.php";
 <body data-bs-spy="scroll" data-bs-target=".navbar" data-bs-offset="50">
 
 <?php
+$id_admin = $_SESSION['id_admin'] ?? "";
 $id_user = $_SESSION['id_user'] ?? "";
-getNavbar($id_user);
-
+$id_vet = $_SESSION['id_vet'] ?? "";
+getNavbar($id_user,$id_admin,$id_vet);
 ?>
 
   <div class="parallax">
@@ -60,14 +61,14 @@ getNavbar($id_user);
           nisl suscipit adipiscing bibendum est ultricies integer quis auctor. Metus aliquam eleifend mi in nulla posuere. Sit
           amet aliquam id diam maecenas ultricies mi.
       </div>
-      <img class="dImg img-fluid" src="index_photos/karlo.jpg" alt="doctor">
+      <img class="dImg img-fluid" src="photos/index_photos/karlo.jpg" alt="doctor">
       </p>
     </div>
     <!--Appointment-->
     <div class="container appDiv">
       <div class="row">
         <div class="col-md-6 pawDiv">
-          <a href="#"><img class="pawImg img-fluid" src="index_photos/paw.png" alt="Appointment Paw"></a>
+          <a href="#"><img class="pawImg img-fluid" src="photos/index_photos/paw.png" alt="Appointment Paw"></a>
         </div>
         <div class="col-md-6 pawText">
           <h1>Ready for Appointment?</h1>
@@ -81,7 +82,7 @@ getNavbar($id_user);
       <div class="row row-cols-1 row-cols-sm-2 row-cols-md-2 row-cols-lg-4 g-4">
         <div class="col">
           <div class="card">
-            <img class="card-img-top" src="index_photos/noir.jpg" alt="Card image">
+            <img class="card-img-top" src="photos/index_photos/noir.jpg" alt="Card image">
             <div class="card-body">
               <h4 class="card-title">John Doe</h4>
               <p class="card-text">Some example text.</p>
@@ -92,7 +93,7 @@ getNavbar($id_user);
 
         <div class="col">
           <div class="card">
-            <img class="card-img-top" src="index_photos/noir.jpg" alt="Card image">
+            <img class="card-img-top" src="photos/index_photos/noir.jpg" alt="Card image">
             <div class="card-body">
               <h4 class="card-title">John Doe</h4>
               <p class="card-text">Some example text.</p>
@@ -103,7 +104,7 @@ getNavbar($id_user);
 
         <div class="col">
           <div class="card">
-            <img class="card-img-top" src="index_photos/noir.jpg" alt="Card image">
+            <img class="card-img-top" src="photos/index_photos/noir.jpg" alt="Card image">
             <div class="card-body">
               <h4 class="card-title">John Doe</h4>
               <p class="card-text">Some example text.</p>
@@ -114,7 +115,7 @@ getNavbar($id_user);
 
         <div class="col">
           <div class="card">
-            <img class="card-img-top" src="index_photos/noir.jpg" alt="Card image">
+            <img class="card-img-top" src="photos/index_photos/noir.jpg" alt="Card image">
             <div class="card-body">
               <h4 class="card-title">John Doe</h4>
               <p class="card-text">Some example text.</p>

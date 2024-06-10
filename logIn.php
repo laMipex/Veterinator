@@ -16,7 +16,7 @@ require_once "db_config.php";
     <meta name="description" content="Veterinary Practice">
     <meta name="keyword" content="animals, care, Veterinary">
     <meta name="robots" content="index, follow">
-    <link rel="icon" type="image/x-icon" href="index_photos/icon.png">
+    <link rel="icon" type="image/x-icon" href="photos/index_photos/icon.png">
     <link rel="stylesheet" href="styless/navBar.css">
     <link rel="stylesheet" href="styless/logIn.css">
     <link rel="stylesheet" href="styless/hover-min.css">
@@ -32,10 +32,10 @@ require_once "db_config.php";
 <body data-bs-spy="scroll" data-bs-target=".navbar" data-bs-offset="50">
 
 <?php
-
+$id_admin = $_SESSION['id_admin'] ?? "";
 $id_user = $_SESSION['id_user'] ?? "";
-getNavbar($id_user);
-
+$id_vet = $_SESSION['id_vet'] ?? "";
+getNavbar($id_user,$id_admin,$id_vet);
 ?>
 <br><br>
 <h1 class="text-center my-5">Log In</h1>
@@ -80,25 +80,50 @@ getNavbar($id_user);
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $username = trim($_POST["username"] ?? '');
-    $password= trim($_POST["password"] ?? '');
+    $password = trim($_POST["password"] ?? '');
 
     if (!empty($username) and !empty($password)) {
-        $data = checkUserLogin($username, $password);
 
-        if ($data and is_int($data['id_user'])) {
-            $_SESSION['username'] = $username;
-            $_SESSION['id_user'] = $data['id_user'];
-            $r=17;
-            redirection("index.php");
-        } else {
+        if ($data = checkAdminLogin($username, $password)) {
+            if ($data and is_int($data['id_admin'])) {
+                $_SESSION['admin'] = $username;
+                $_SESSION['id_admin'] = $data['id_admin'];
+                $r = 17;
+                redirection("index.php");
+            } else {
+                $r = 1;
+                redirection("logIn.php?r=1");
+            }
+
+
+        } elseif ($data = checkUserLogin($username, $password)) {
+
+            if ($data and is_int($data['id_user'])) {
+                $_SESSION['username'] = $username;
+                $_SESSION['id_user'] = $data['id_user'];
+                $r = 17;
+                redirection("index.php");
+            } else {
+                $r = 1;
+                redirection("logIn.php?r=1");
+            }
+        }
+        elseif ($data = checkVetLogin($username, $password)) {
+
+            if ($data and is_int($data['id_vet'])) {
+                $_SESSION['username'] = $username;
+                $_SESSION['id_vet'] = $data['id_vet'];
+                $r = 17;
+                redirection("index.php");
+            } else {
+                $r = 1;
+                redirection("logIn.php?r=1");
+            }
+        }else {
             $r = 1;
             redirection("logIn.php?r=1");
+
         }
-
-    } else {
-        $r=1;
-        redirection("logIn.php?r=1");
-
     }
 }
 
