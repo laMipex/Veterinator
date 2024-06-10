@@ -46,7 +46,7 @@ require "parts/functions.php";
             button #savePet{
                 padding: 5px;
             }
-            #photo
+            #file
             {
                 display: none;
             }
@@ -94,7 +94,7 @@ require "parts/functions.php";
                     <small></small>
                 </div>
                 <div class="col-12 col-md-6 mx-5 pt-3">
-                    <label for="photo" class="form-label">Pet photo:
+                    <label for="file" class="form-label">Pet photo:
                         <img src="photos/uploads/upload.png" alt="upload" width="50" title="Choose an image"></label>
                     <input type="file" name="file" id="file"><br>
                     <small></small>
@@ -119,18 +119,44 @@ require "parts/functions.php";
     <div id="result"></div>
 
 
+    <?php
+
+    $sql = "SELECT * FROM pet";
+    $query = $pdo->prepare($sql);
+    $query->execute();
+    $results = $query->fetchAll(PDO::FETCH_OBJ); // PDO::FETCH_ASSOC
+    //var_dump($results);
+
+    if ($query->rowCount() > 0) {
+        echo '<div class="container my-5">';
+            echo '<h1 class="dH my-5">Your pets</h1>';
+        echo '<div class="row  row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">';
 
 
-    <div class="row">
-        <div class="col-sm-6">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Special title treatment</h5>
-                    <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                    <a href="#" class="btn btn-primary">Go somewhere</a>
-                </div>
-            </div>
-        </div>
+        foreach ($results as $result) {
+
+            echo '<div class="col">';
+            echo '<div class="card">';
+            echo '<img class="card-img-top" src="photos/uploadsPet/'.$result->photo.'" alt="Card image">';
+            echo '<div class="card-body">';
+
+            echo '<h5 class="card-title">'.$result->pet_name.'</h5>';
+            echo '<a href="#" class="btn btn-primary">El karton</a><br>';
+            echo '<a href="#" class="btn btn-primary">Edit profile</a><br>';
+            echo '<a href="#" class="btn btn-primary">Book procedure</a>';
+            echo '</div></div></div>';
+
+        }
+        echo '</div></div>';
+
+    }
+
+
+
+    ?>
+
+
+
 
 
 
