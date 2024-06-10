@@ -78,6 +78,8 @@ require_once "db_config.php";
             $serviceName = $result->service_name;
             $description = $result->service_description;
             $duration = $result->service_duration;
+            $price = $result -> price;
+            $discount = $result -> discount;
             $image_path = $result->photo;
 
             echo '
@@ -85,7 +87,9 @@ require_once "db_config.php";
                 <div class="col-12 col-md-4">
                     <p name="service_name">Service name:' . $serviceName .'</p>
                     <p name="service_description">Service description:' . $description .'</p>
-                    <p name="service_duration">Service duration:' . $duration .'</p>                                                  
+                    <p name="service_duration">Service duration:' . $duration .'</p>   
+                    <p name="service_price">Service price:' . $price .'</p>
+                    <p name="service_discount">Service discount:' . $discount .'</p>                                               
                  </div>
                  <div class="col-10 col-md-4">
                     <img src="photos/uploads/' . $image_path . '" alt="Service Image" width="250" height="200"><br><br>                

@@ -134,6 +134,10 @@ require "parts/functions.php";
 
 
         foreach ($results as $result) {
+//            $id_pet =  $result->id_pet;
+//            $_SESSION[$id_pet] = $id_pet;
+            //$id_pet = $_SESSION['id_pet'];
+            $id_pet = $result->id_pet;
 
             echo '<div class="col">';
             echo '<div class="card">';
@@ -141,9 +145,10 @@ require "parts/functions.php";
             echo '<div class="card-body">';
 
             echo '<h5 class="card-title">'.$result->pet_name.'</h5>';
+            echo '<p>Izabrani lekar: </p>';
             echo '<a href="#" class="btn btn-primary">El karton</a><br>';
-            echo '<a href="#" class="btn btn-primary">Edit profile</a><br>';
-            echo '<a href="#" class="btn btn-primary">Book procedure</a>';
+            echo '<a href="edit_profile.php?id_pet=' . $id_pet . '" class="btn btn-primary">Edit profile</a><br>';
+            echo '<a href="scedule_treatment.php" class="btn btn-primary">Book procedure</a>';
             echo '</div></div></div>';
 
         }

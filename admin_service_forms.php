@@ -74,6 +74,16 @@ getNavbar($id_user,$id_admin,$id_vet);
                         <input type="text" class="form-control" id="duration" name="duration">
                         <br><small></small>
                     </div>
+                    <div class="mb-3 col-11 col-md-6">
+                        <label for="price" class="form-label">Service Price</label>
+                        <input type="text" class="form-control" id="price" name="price">
+                        <br><small></small>
+                    </div>
+                    <div class="mb-3 col-11 col-md-6">
+                        <label for="discount" class="form-label">Service Discount</label>
+                        <input type="text" class="form-control" id="discount" name="discount">
+                        <br><small></small>
+                    </div>
                      <label for="photo" class="col-md-6"> Choose photo:
                     <img src="photos/uploads/upload.png" alt="upload" width="50" title="Choose an image">
                     </label>
@@ -144,6 +154,20 @@ getNavbar($id_user,$id_admin,$id_vet);
                                 <label for="service_duration">Service Duration:</label></div>
                             <div class="col-5">
                                 <input type="text" id="service_duration" name="service_duration"  value="' . $service->service_duration . '">
+                                <br><small></small></div><br>                        
+                        </div>
+                        <div class="row my-4">
+                            <div class="col-2">
+                                <label for="service_price">Service Price:</label></div>
+                            <div class="col-5">
+                                <input type="text" id="service_price" name="service_price"  value="' . $service->price . '">
+                                <br><small></small></div><br>                        
+                        </div>
+                        <div class="row my-4">
+                            <div class="col-2">
+                                <label for="service_discount">Service Discount:</label></div>
+                            <div class="col-5">
+                                <input type="text" id="service_discount" name="service_discount"  value="' . $service->discount . '">
                                 <br><small></small></div><br>                        
                         </div>
                     <label for="photo"> Choose photo:
@@ -226,6 +250,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $name = $_POST['name'];
             $description = $_POST['description'];
             $duration = $_POST['duration'];
+            $price = $_POST['price'];
+            $discount = $_POST['discount'];
 
             if ($_FILES['file']["error"] > 0) {
                 $r = 21;
@@ -276,13 +302,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 
 
-            $sql = "INSERT INTO services (service_name,service_description,photo,service_duration) VALUES (:name,:desc,:photo,:duration)";
+            $sql = "INSERT INTO services (service_name,service_description,photo,service_duration,price,discount) VALUES (:name,:desc,:photo,:duration,:price,:discount)";
             $stmt = $pdo->prepare($sql);
 
             $stmt->bindParam(':name', $name, PDO::PARAM_STR);
             $stmt->bindParam(':desc', $description, PDO::PARAM_STR);
             $stmt->bindParam(':photo', $new_file_name, PDO::PARAM_STR);
             $stmt->bindParam(':duration', $duration, PDO::PARAM_STR);
+            $stmt->bindParam(':price', $price, PDO::PARAM_STR);
+            $stmt->bindParam(':discount', $discount, PDO::PARAM_STR);
             $stmt->execute();
             $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -302,6 +330,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $serviceName = $_POST['service_name'];
             $description = $_POST['service_description'];
             $duration = $_POST['service_duration'];
+            $price = $_POST['service_price'];
+            $discount = $_POST['service_discount'];
             $id = $_POST['id_service'];
 
 
@@ -352,7 +382,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             //}
 
 
-            $sql = "UPDATE services SET service_name = :service_name, service_description = :service_description, photo = :photo, service_duration = :service_duration WHERE id_service = :id_service";
+            $sql = "UPDATE services SET service_name = :service_name, service_description = :service_description, photo = :photo, service_duration = :service_duration,
+                    price = :price, discount = :discount WHERE id_service = :id_service";
             $query = $pdo->prepare($sql);
 
             $query->bindParam(':id_service', $id, PDO::PARAM_STR);
@@ -360,6 +391,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $query->bindParam(':service_description', $description, PDO::PARAM_STR);
             $query->bindParam(':photo', $new_file_name, PDO::PARAM_STR);
             $query->bindParam(':service_duration', $duration, PDO::PARAM_STR);
+            $query->bindParam(':service_price', $price, PDO::PARAM_STR);
+            $query->bindParam(':service_discount', $discount, PDO::PARAM_STR);
 
             $query->execute();
 

@@ -47,28 +47,67 @@ $results = $query->fetchAll(PDO::FETCH_OBJ); // PDO::FETCH_ASSOC
 
 if ($query->rowCount() > 0) {
 
-    foreach ($results as $result) {
+    if($id_user){
 
-        $id_service = $result ->id_service;
-        $serviceName = $result->service_name;
-        $description = $result->service_description;
-        $duration = $result->service_duration;
-        $image_path = $result->photo;
+        foreach ($results as $result) {
 
-        echo '<div class="row mx-5 my-5">
-                <div class="col-6">
-                    <p name="service_name">Service name:' . $serviceName .'</p>
-                    <p name="service_description">Service description:' . $description .'</p>
-                    <p name="service_duration">Service duration:' . $duration .'</p>
-                 </div>
-                 <div class="col-6">
-                    <img src="photos/uploads/' . $image_path . '" alt="Service Image" width="600" height="300"><br><br>
-                 
-                 </div>
-                 <hr>                       
-                </div>';
-         }
+            $id_service = $result ->id_service;
+            $serviceName = $result->service_name;
+            $description = $result->service_description;
+            $duration = $result->service_duration;
+            $price = $result->price;
+            $discount = $result->discount;
+            $image_path = $result->photo;
+            $avaliable_date = $result->service_date;
+
+            echo '<div class="row mx-5 my-5">
+                    <div class="col-6">
+                        <p name="service_name">Service name:' . $serviceName .'</p>
+                        <p name="service_description">Service description:' . $description .'</p>
+                        <p name="service_duration">Service duration:' . $duration .'</p>
+                        <p name="service_price">Service price:' . $price .'$</p>
+                        <p name="service_discount">Service Discount:' . $discount .'$</p>
+                        <p name="service_date">Service date:' . $avaliable_date .'</p>
+                        <input type="date" min="2024-06-10" max="2024-07-10">
+                         <input type="time" min="08:00" max="21:00">
+
+                     </div>
+                     <div class="col-6">
+                        <img src="photos/uploads/' . $image_path . '" alt="Service Image" width="600" height="300"><br><br>
+                     
+                     </div>
+                     <hr>                       
+                    </div>';
         }
+
+    } else{
+
+        foreach ($results as $result) {
+
+            $id_service = $result ->id_service;
+            $serviceName = $result->service_name;
+            $description = $result->service_description;
+            $duration = $result->service_duration;
+            $price = $result->price;
+            $image_path = $result->photo;
+
+            echo '<div class="row mx-5 my-5">
+                    <div class="col-6">
+                        <p name="service_name">Service name:' . $serviceName .'</p>
+                        <p name="service_description">Service description:' . $description .'</p>
+                        <p name="service_duration">Service duration:' . $duration .'</p>
+                        <p name="service_price">Service price:' . $price .'$</p>
+                     </div>
+                     <div class="col-6">
+                        <img src="photos/uploads/' . $image_path . '" alt="Service Image" width="600" height="300"><br><br>
+                     
+                     </div>
+                     <hr>                       
+                    </div>';
+        }
+
+    }
+}
 ?>
     </div>
 
