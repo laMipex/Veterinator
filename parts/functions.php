@@ -8,7 +8,6 @@ require 'PHPMailer/src/Exception.php';
 require 'PHPMailer/src/PHPMailer.php';
 require 'PHPMailer/src/SMTP.php';
 
-require_once "db_config.php";
 
 $pdo = connectDatabase($dsn, $pdoOptions);
 $GLOBALS['pdo'] = $pdo;
@@ -26,6 +25,21 @@ function getNavbar(string $id_user,string $id_admin,string $id_vet) {
     }
     else {
         include_once "nav_guest.php";
+    }
+}
+
+function getNavbarBlack(string $id_user,string $id_admin,string $id_vet) {
+    if(isset($id_user) && !empty($id_user)){
+        include_once "nav_user.php";
+    }
+    elseif (isset($id_admin) && !empty($id_admin)){
+        include_once "nav_admin.php";
+    }
+    elseif (isset($id_vet) && !empty($id_vet)){
+        include_once "nav_vet.php";
+    }
+    else {
+        include_once "nav_guestBlack.php";
     }
 }
 
@@ -122,12 +136,38 @@ function createToken(int $length): ?string
     }
 }
 
+function createCode($length): string
+{
+    $down = 97;
+    $up = 122;
+    $i = 0;
+    $code = "";
+
+    /*
+      48-57  = 0 - 9
+      65-90  = A - Z
+      97-122 = a - z
+    */
+
+    $div = mt_rand(3, 9); // 3
+
+    while ($i < $length) {
+        if ($i % $div == 0)
+            $character = strtoupper(chr(mt_rand($down, $up)));
+        else
+            $character = chr(mt_rand($down, $up)); // mt_rand(97,122) chr(98)
+        $code .= $character; // $code = $code.$character; //
+        $i++;
+    }
+    return $code;
+}
+
 
 
 function sendEmail(PDO $pdo, string $email, array $emailData, string $body, int $id_user): void
 {
 
-     $phpmailer = new PHPMailer(true);
+    $phpmailer = new PHPMailer(true);
 
     try {
 
@@ -159,6 +199,7 @@ function sendEmail(PDO $pdo, string $email, array $emailData, string $body, int 
     }
 
 }
+
 
 
 function sendForgetPasswordToken(PDO $pdo, string $email): bool

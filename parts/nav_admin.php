@@ -11,7 +11,7 @@
                     <a class="nav-link active" aria-current="page" href="index.php">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="admin_services_description.php">Services</a>
+                    <a class="nav-link active" aria-current="page" href="services_description.php">Services</a>
                 </li>
 
                 <li class="nav-item">
@@ -26,6 +26,7 @@
                         Profile
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        <li><a class="dropdown-item" href="admin_services_description.php">Admin Services</a></li>
                         <li><a class="dropdown-item" href="logout.php">Log out</a></li>
                     </ul>
                 </li>
