@@ -3,7 +3,7 @@ session_start();
 ob_start();
 
 require "db_config.php";
-require "parts/functions.php";
+require"parts/functions.php";
 
 ?>
 
@@ -37,9 +37,8 @@ require "parts/functions.php";
 $id_admin = $_SESSION['id_admin'] ?? "";
 $id_user = $_SESSION['id_user'] ?? "";
 $id_vet = $_SESSION['id_vet'] ?? "";
-getNavbar($id_user,$id_admin,$id_vet);
+getNavbarBlack($id_user,$id_admin,$id_vet);
 $action = "signIn.php";
-echo '<h1>Register as User</h1>';
 include_once "parts/signinForm.php"
 ?>
 

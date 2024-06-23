@@ -54,14 +54,20 @@ function init() {
 
                     alert(jsonData.message);
 
+                    if (jsonData.status === 'OK') {
+                        // Hide the form if insertion is successful
+                        insertPetForm.style.display = "none";
+                        viewInsertPetForm.textContent = 'Add Pet';
+                    }
+
                     inputs.forEach((element) => {
                         element.value = '';
                     });
 
-                    result.innerHTML = jsonData.message;
+                    /*result.innerHTML = jsonData.message;
                     setTimeout(function () {
                         result.innerHTML = "";
-                    }, 2000);
+                    }, 2000);*/
                 }
             };
 
@@ -75,8 +81,8 @@ function init() {
             hideErrorMessage(petName);
         });
 
-        petAge.addEventListener('input', function () {
-            hideErrorMessage(petAge);
+        species.addEventListener('input', function () {
+            hideErrorMessage(species);
         });
     }
 

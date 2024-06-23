@@ -1,8 +1,9 @@
 <?php
 session_start();
 
-require_once "parts/functions.php";
-require_once "db_config.php";
+require "db_config.php";
+require"parts/functions.php";
+
 ?>
 
 <!DOCTYPE html>

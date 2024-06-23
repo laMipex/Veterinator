@@ -1,6 +1,7 @@
 <?php
+
 require "db_config.php";
-require "parts/functions.php";
+require"parts/functions.php";
 ob_start();
 
 ?>

@@ -38,9 +38,8 @@ require "parts/functions.php";
 $id_admin = $_SESSION['id_admin'] ?? "";
 $id_user = $_SESSION['id_user'] ?? "";
 $id_vet = $_SESSION['id_vet'] ?? "";
-getNavbar($id_user,$id_admin,$id_vet);
+getNavbarBlack($id_user,$id_admin,$id_vet);
 $action = "vet_signin.php";
-echo '<h1>Register as Veterinarian</h1>';
 include_once "parts/signinForm.php"
 ?>
 

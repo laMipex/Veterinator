@@ -1,10 +1,8 @@
 <?php
 session_start();
 ob_start();
-require_once "parts/functions.php";
-require_once "db_config.php";
-
-
+require "db_config.php";
+require "parts/functions.php";
 ?>
 
 <!DOCTYPE html>
@@ -24,14 +22,12 @@ require_once "db_config.php";
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
     <title>Veterinary Practice - Veterinator</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous">
-    </script>
-    <script src="js/script.js"></script>
-
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="js/admin_service_description.js"></script>
 </head>
 <body>
 <div data-bs-spy="scroll" data-bs-target=".navbar" data-bs-offset="50">
-
     <?php
     $id_admin = $_SESSION['id_admin'] ?? "";
     $id_user = $_SESSION['id_user'] ?? "";
@@ -39,92 +35,148 @@ require_once "db_config.php";
     getNavbar($id_user,$id_admin,$id_vet);
     ?>
 
-    <form action="admin_service_forms.php" class="d-flex mx-5 my-5">
-        <input type="hidden" name="action" value="insert">
-        <button id="btnS" class="btn btn-primary" type="submit" id="insert">Insert</button>
+    <form id="insertFormButton" class="d-flex mx-5 my-5">
+        <button class="btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#insertModal">Insert</button>
     </form>
 
-    <?php $r = 0;
+    <div class="container">
+        <?php
+        $sql = "SELECT * FROM services ORDER BY service_name ASC";
+        $query = $pdo->prepare($sql);
+        $query->execute();
+        $results = $query->fetchAll(PDO::FETCH_OBJ);
 
-    if (isset($_GET["r"]) and is_numeric($_GET['r'])) {
-    $r = (int)$_GET["r"];
-
-    if (array_key_exists($r, $messages)) {
-    echo '
-    <div class="alert alert-info alert-dismissible fade show m-3" role="alert">
-        ' . $messages[$r] . '
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
-        </button>
-    </div>
-    ';
-    }
-    }
-    ?>
-    <?php
-
-
-    $sql = "SELECT * FROM services ORDER BY service_name ASC";
-    $query = $pdo->prepare($sql);
-    $query->execute();
-    $results = $query->fetchAll(PDO::FETCH_OBJ); // PDO::FETCH_ASSOC
-
-    echo '<div class="container">';
-
-    if ($query->rowCount() > 0) {
-
-        foreach ($results as $result) {
-
-            $id_service = $result ->id_service;
-            $serviceName = $result->service_name;
-            $description = $result->service_description;
-            $duration = $result->service_duration;
-            $price = $result -> price;
-            $discount = $result -> discount;
-            $image_path = $result->photo;
-
-            echo '
-                <div class="row mx-5 my-5">
-                <div class="col-12 col-md-4">
-                    <p name="service_name">Service name:' . $serviceName .'</p>
-                    <p name="service_description">Service description:' . $description .'</p>
-                    <p name="service_duration">Service duration:' . $duration .'</p>   
-                    <p name="service_price">Service price:' . $price .'</p>
-                    <p name="service_discount">Service discount:' . $discount .'</p>                                               
-                 </div>
-                 <div class="col-10 col-md-4">
-                    <img src="photos/uploads/' . $image_path . '" alt="Service Image" width="250" height="200"><br><br>                
-                 </div>                 
-                  <div class="col-2  col-md-4">                                  
-                    <form action="admin_service_forms.php" class="d-flex justify-content-end">
-                         <input type="hidden" name="id_service" value="' . $id_service . '">
-                        <input type="hidden" name="action" value="update">
-                        <button id="update" class="btn btn-primary" type="submit">Update</button><br><br>                   
-                    </form>
-                    <form action="admin_service_forms.php" class="d-flex justify-content-end">
-                         <input type="hidden" name="id_service" value="' . $id_service . '">
-                        <input type="hidden" name="action" value="delete">
-                        <button id="delete" class="btn btn-primary" type="submit" >Delete</button>;
-                             
-                    </form>    
-                                
-                  </div>
-                  
-                  <hr> 
-        
-                </div>
-                ';
-
+        if ($query->rowCount() > 0) {
+            foreach ($results as $result) {
+                echo '
+                <div class="row mx-5 my-5 service-item" data-id="'.$result->id_service.'">
+                    <div class="col-12 col-md-4">
+                        <p>Service name: ' . $result->service_name . '</p>
+                        <p>Service description: ' . $result->service_description . '</p>
+                        <p>Service duration: ' . $result->service_duration . '</p>   
+                        <p>Service price: ' . $result->price . '</p>
+                        <p>Service discount: ' . $result->discount . '</p>                                               
+                    </div>
+                    <div class="col-10 col-md-4">
+                        <img src="photos/uploads/' . $result->photo . '" alt="Service Image" width="250" height="200"><br><br>                
+                    </div>                 
+                    <div class="col-2  col-md-4">                                  
+                        <button class="btn btn-primary updateBtn" data-bs-toggle="modal" data-bs-target="#updateModal">Update</button><br><br>                   
+                        <button class="btn btn-primary deleteBtn" data-bs-toggle="modal" data-bs-target="#deleteModal">Delete</button>
+                    </div>
+                    <hr> 
+                </div>';
+            }
         }
-    }
-    echo '</div>'
-    ?>
+        ?>
+    </div>
 </div>
 
+<!-- Insert Modal -->
+<div class="modal fade" id="insertModal" tabindex="-1" aria-labelledby="insertModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="insertModalLabel">Insert Service</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="insertForm" method="post" enctype="multipart/form-data">
+                    <input type="hidden" name="action" value="insert">
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Service Name</label>
+                        <input type="text" class="form-control" id="name" name="name">
+                    </div>
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Service Description</label>
+                        <textarea class="form-control" id="description" name="description"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="duration" class="form-label">Service Duration</label>
+                        <input type="text" class="form-control" id="duration" name="duration">
+                    </div>
+                    <div class="mb-3">
+                        <label for="price" class="form-label">Service Price</label>
+                        <input type="text" class="form-control" id="price" name="price">
+                    </div>
+                    <div class="mb-3">
+                        <label for="discount" class="form-label">Service Discount</label>
+                        <input type="text" class="form-control" id="discount" name="discount">
+                    </div>
+                    <div class="mb-3">
+                        <label for="photo" class="form-label">Service Photo</label>
+                        <input type="file" class="form-control" id="photo" name="file">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 
+<!-- Update Modal -->
+<div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="updateModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="updateModalLabel">Update Service</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="updateForm" method="post" enctype="multipart/form-data">
+                    <input type="hidden" name="id_service" id="updateIdService">
+                    <input type="hidden" name="action" value="update">
+                    <div class="mb-3">
+                        <label for="updateName" class="form-label">Service Name</label>
+                        <input type="text" class="form-control" id="updateName" name="service_name">
+                    </div>
+                    <div class="mb-3">
+                        <label for="updateDescription" class="form-label">Service Description</label>
+                        <textarea class="form-control" id="updateDescription" name="service_description"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="updateDuration" class="form-label">Service Duration</label>
+                        <input type="text" class="form-control" id="updateDuration" name="service_duration">
+                    </div>
+                    <div class="mb-3">
+                        <label for="updatePrice" class="form-label">Service Price</label>
+                        <input type="text" class="form-control" id="updatePrice" name="service_price">
+                    </div>
+                    <div class="mb-3">
+                        <label for="updateDiscount" class="form-label">Service Discount</label>
+                        <input type="text" class="form-control" id="updateDiscount" name="service_discount">
+                    </div>
+                    <div class="mb-3">
+                        <label for="updatePhoto" class="form-label">Service Photo</label>
+                        <input type="file" class="form-control" id="updatePhoto" name="file">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 
-<?php
-include "parts/footer.php";
-?>
+<!-- Delete Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Delete Service</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="deleteForm" method="post">
+                    <input type="hidden" name="id_service" id="deleteIdService">
+                    <input type="hidden" name="action" value="delete">
+                    <p>Are you sure you want to delete this service?</p>
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
 </body>
 </html>
-

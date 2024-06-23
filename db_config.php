@@ -3,7 +3,7 @@ const PARAMS = [
     "HOST" => 'localhost',
     "USER" => 'root',
     "PASS" => '',
-    "DBNAME" => 'vet',
+    "DBNAME" => 'vet2',
     "CHARSET" => 'utf8mb4'
 ];
 
@@ -17,7 +17,7 @@ $pdoOptions = [
 ];
 
 
-const SITE = 'http://localhost/wp_2024_3/Veterinator-main/';
+const SITE = 'http://localhost/vetUpNew/';
 
 $actions = ['insert', 'update', 'delete'];
 
@@ -70,6 +70,10 @@ $emailMessages = [
     ],
     'vet_signIn' => [
         'subject' => 'Register on web site as Veterinarian',
+        'altBody' => 'This is the body in plain text for non-HTML mail clients'
+    ],
+    'inesrtReservation' => [
+        'subject' => 'Reservation successfull!',
         'altBody' => 'This is the body in plain text for non-HTML mail clients'
     ],
 

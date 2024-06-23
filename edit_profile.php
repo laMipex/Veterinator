@@ -1,8 +1,15 @@
 <?php
 session_start();
 
+
 require "db_config.php";
-require "parts/functions.php";
+require"parts/functions.php";
+
+
+$id_pet = $_POST['id_pet'] ?? null;
+$_SESSION['id_pet'] = $id_pet;
+
+
 
 ?>
 
@@ -52,6 +59,9 @@ require "parts/functions.php";
         }
     </style>
 
+    <script src="js/edit_profile.js"></script>
+
+
 </head>
 <body data-bs-spy="scroll" data-bs-target=".navbar" data-bs-offset="50">
 
@@ -61,7 +71,6 @@ $id_user = $_SESSION['id_user'] ?? "";
 $id_vet = $_SESSION['id_vet'] ?? "";
 getNavbar($id_user,$id_admin,$id_vet);
 
-$id_pet = $_GET['id_pet'] ?? "";
 ?>
 
 <?php
@@ -84,20 +93,19 @@ $id_pet = $_GET['id_pet'] ?? "";
                     $breed = $result->breed;
                     $photo = $result->photo;
 
-                    echo '<div class="row mx-5 my-5">
-                    <div class="col-6">
-                        <p name="pet_name">Pet name: ' . $pet_name . '</p>
-                        <p name="age">Pet age: ' . $age . '</p>
-                        <p name="species">Pet species: ' . $species . '</p>
-                        <p name="breed">Pet breed: ' . $breed . '</p>
-                        <p name="service_date">USER: ' . $id_user . '</p>
-                        <input type="date" min="2024-06-10" max="2024-07-10">
-                    </div>
-                    <div class="col-6">
-                        <img src="photos/uploadsPet/' . $photo . '" alt="Service Image" width="600" height="300"><br><br>
-                    </div>
-                    <hr>
-                </div>';
+                    echo '
+                        <div class="row justify-content-center align-items-center text-center my-5 ">
+                            <div class="col-4">
+                                <p name="pet_name">Pet name: ' . $pet_name . '</p>
+                                <p name="age">Pet age: ' . $age . '</p>
+                                <p name="species">Pet species: ' . $species . '</p>
+                                <p name="breed">Pet breed: ' . $breed . '</p>                                                                                  
+                            </div>
+                            <div class="col-4">
+                                <img src="photos/uploadsPet/' . $photo . '" alt="Pet Image" width="600" height="300"><br><br>
+                            </div>
+                                
+                       </div>';
                 }
             }
 
@@ -108,17 +116,22 @@ $id_pet = $_GET['id_pet'] ?? "";
             //var_dump($results);
 
             if ($query->rowCount() > 0) {
-                echo '<select name="vet" id="vet">';
+
+                echo '<div class="row justify-content-center align-items-center text-center my-5">';
+                echo '<div class="col-4">';
+                echo '<select name="vet" id="vet"  class="form-select my-3 mx-auto" style="width: auto;">';
                 echo '<option value="-1">- Choose a vet -</option>';
 
                 foreach ($results as $result) {
-                    echo '<option value="' . $result->id_vet . '">' . $result->vet_fname . '</option>';
+                    echo '<option value="' . $result->id_vet . '">' . $result->vet_fname ." " .$result->vet_lname .'</option>';
                 }
                 echo '</select>';
+                echo '<button type="submit" class="btn btn-primary my-3 mx-auto " style="width: 100px" id="chooseVet">Send</button>';
+                echo '<input type="hidden" id="id_pet" value="' . $id_pet . '">';
+
+                echo '</div></div>';
+
             }
-
-        }else{
-
         }
 
 
@@ -126,6 +139,36 @@ $id_pet = $_GET['id_pet'] ?? "";
 
     }
     elseif ($id_vet) {
+        $sql = "SELECT * FROM pet WHERE id_pet = :id_pet";
+        $query = $pdo->prepare($sql);
+        $query->bindParam(':id_pet', $id_pet, PDO::PARAM_STR);
+        $query->execute();
+        $results = $query->fetchAll(PDO::FETCH_OBJ);
+
+        if ($query->rowCount() > 0) {
+            foreach ($results as $result) {
+                $id_selected_pet = $result->id_pet;
+                $pet_name = $result->pet_name;
+                $age = $result->age;
+                $species = $result->species;
+                $breed = $result->breed;
+                $photo = $result->photo;
+
+                echo '
+                        <div class="row justify-content-center align-items-center text-center my-5 ">
+                            <div class="col-4">
+                                <p name="pet_name">Pet name: ' . $pet_name . '</p>
+                                <p name="age">Pet age: ' . $age . '</p>
+                                <p name="species">Pet species: ' . $species . '</p>
+                                <p name="breed">Pet breed: ' . $breed . '</p>                                                                                  
+                            </div>
+                            <div class="col-4">
+                                <img src="photos/uploadsPet/' . $photo . '" alt="Pet Image" width="600" height="300"><br><br>
+                            </div>
+                                
+                       </div>';
+            }
+        }
 
 
     }else{

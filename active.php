@@ -1,6 +1,6 @@
 <?php
-require "db_config.php";
-require "parts/functions.php";
+require_once "db_config.php";
+require_once "parts/functions.php";
 
 if (isset($_GET['token'])) {
     $token = trim($_GET['token']);
