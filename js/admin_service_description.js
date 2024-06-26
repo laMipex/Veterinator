@@ -1,34 +1,40 @@
-$(document).ready(function() {
+document.addEventListener('DOMContentLoaded', function() {
     // Insert Service
-    $('#insertForm').on('submit', function(e) {
+    document.getElementById('insertForm').addEventListener('submit', function(e) {
         e.preventDefault();
         let formData = new FormData(this);
-        $.ajax({
-            url: 'admin_service_forms.php',
-            type: 'POST',
-            data: formData,
-            contentType: false,
-            processData: false,
-            success: function(response) {
+        fetch('admin_service_forms.php', {
+            method: 'POST',
+            body: formData
+        })
+            .then(response => response.text())
+            .then(response => {
                 alert(response);
                 location.reload();
-            },
-            error: function(error) {
-                alert('Error: ' + error.responseText);
-            }
+            })
+            .catch(error => {
+                alert('Error: ' + error);
+            });
+    });
+
+
+    // Update Service
+    document.querySelectorAll('.updateBtn').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            // Locate the closest '.service-item' relative to the clicked button
+            var serviceItem = this.closest('.service-item');
+
+            // Update the values using vanilla JavaScript
+            id = serviceItem.dataset.id;
+            document.querySelector('#updateIdService').value = id;
+            document.getElementById('updateName').value = serviceItem.querySelector('h5').textContent;
+            document.getElementById('updateDescription').value = serviceItem.querySelector('p:nth-of-type(1)').textContent;
+            document.getElementById('updateDuration').value = serviceItem.querySelector('p:nth-of-type(2)').textContent.split(': ')[1];
+            document.getElementById('updatePrice').value = serviceItem.querySelector('p:nth-of-type(3)').textContent.split(': ')[1];
+            document.getElementById('updateDiscount').value = serviceItem.querySelector('p:nth-of-type(4)').textContent.split(': ')[1];
         });
     });
 
-    // Update Service - populate modal with current values
-    $('.updateBtn').on('click', function() {
-        let serviceItem = $(this).closest('.service-item');
-        $('#updateIdService').val(serviceItem.data('id'));
-        $('#updateName').val(serviceItem.find('p').eq(0).text().split(': ')[1]);
-        $('#updateDescription').val(serviceItem.find('p').eq(1).text().split(': ')[1]);
-        $('#updateDuration').val(serviceItem.find('p').eq(2).text().split(': ')[1]);
-        $('#updatePrice').val(serviceItem.find('p').eq(3).text().split(': ')[1]);
-        $('#updateDiscount').val(serviceItem.find('p').eq(4).text().split(': ')[1]);
-    });
 
     // Update Service
     $('#updateForm').on('submit', function(e) {
@@ -51,25 +57,27 @@ $(document).ready(function() {
     });
 
     // Delete Service - set service id
-    $('.deleteBtn').on('click', function() {
-        let serviceItem = $(this).closest('.service-item');
-        $('#deleteIdService').val(serviceItem.data('id'));
+    document.querySelectorAll('.deleteBtn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            let serviceItem = this.closest('.service-item');
+            document.getElementById('deleteIdService').value = serviceItem.dataset.id;
+        });
     });
 
     // Delete Service
-    $('#deleteForm').on('submit', function(e) {
+    document.getElementById('deleteForm').addEventListener('submit', function(e) {
         e.preventDefault();
-        $.ajax({
-            url: 'admin_service_forms.php',
-            type: 'POST',
-            data: $(this).serialize(),
-            success: function(response) {
+        fetch('admin_service_forms.php', {
+            method: 'POST',
+            body: new FormData(this)
+        })
+            .then(response => response.text())
+            .then(response => {
                 alert(response);
                 location.reload();
-            },
-            error: function(error) {
-                alert('Error: ' + error.responseText);
-            }
-        });
+            })
+            .catch(error => {
+                alert('Error: ' + error);
+            });
     });
 });
