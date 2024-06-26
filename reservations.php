@@ -102,7 +102,7 @@ $id_vet = $_SESSION['id_vet'] ?? "";
 
 <div id="resultMessage"></div><br><br>
 
-<!--Tabela u kojoj su ispisane sve rezervacije za danasnji dan-->
+<!--Tabela u kojoj su ispisane sve rezervacije za DANASNJI DAN-->
 
 <div class="container mx-auto my-5">
     <h1>Reservations for the day:</h1><br><br>
@@ -110,6 +110,9 @@ $id_vet = $_SESSION['id_vet'] ?? "";
 
     </table>
 </div>
+
+
+
 
 <!--Popup forma sa potrebnim informacijama i mogucim unosom za elektronski karton-->
 
@@ -142,6 +145,61 @@ $id_vet = $_SESSION['id_vet'] ?? "";
             <button type="submit" class="btn btn-primary" id="saveDoneTreatment">Save treatment</button>
     </form>
 
+
+
+
+
+<!--SVE REZERVACIJE NAREDNIH 30 DANA-->
+<hr>
+<div class="container mx-auto my-5">
+    <h1>List of all Reservations!</h1>
+<table>
+
+<?php
+
+    $sql2 = "SELECT r.id_reservation, r.reservation_date,r.reservation_time, r.code, CONCAT(u.user_fname, ' ', u.user_lname) AS user_name,
+    r.id_pet, p.pet_name, r.id_service, s.service_name, r.service_duration,r.code_verified
+    FROM reservations r
+    INNER JOIN pet p ON p.id_pet = r.id_pet
+    INNER JOIN users u ON p.id_user = u.id_user
+    INNER JOIN vet v ON v.id_vet = r.id_vet
+    INNER JOIN services s ON r.id_service = s.id_service
+    WHERE r.id_vet = :id_vet AND DATE(r.reservation_date) > CURDATE() AND r.code_verified = 0
+    ORDER BY r.reservation_time ASC";
+
+    $query2 = $pdo->prepare($sql2);
+    $query2->bindParam(':id_vet', $id_vet, PDO::PARAM_STR);
+    $query2->execute();
+    $results2 = $query2->fetchAll(PDO::FETCH_OBJ);
+
+    if ($query2->rowCount() > 0) {
+    echo '
+    <tr>
+        <th>Date:</th>
+        <th>Time:</th>
+        <th>User:</th>
+        <th>Pet:</th>
+        <th>Service:</th>
+       
+    </tr>';
+
+    foreach ($results2 as $result) {
+    echo '<tr style="border-bottom: 2px solid black;">
+        <td>' . $result->reservation_date . '</td>
+        <td>' . $result->reservation_time . '</td>
+        <td>' . $result->user_name . '</td>
+        <td>' . $result->pet_name . '</td>
+        <td>' . $result->service_name . '</td>
+      
+        
+    </tr>';
+    }
+    } else {
+    echo '<h1>Sorry, no reservation for today!</h1>';
+    }
+?>
+</table>
+</div>
 
 <?php include "parts/footer.php";?>
 
