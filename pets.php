@@ -60,16 +60,6 @@ $results = $query->fetchAll(PDO::FETCH_OBJ); // PDO::FETCH_ASSOC
 
 
 
-$sql_treatments = "SELECT p.pet_name, CONCAT(v.vet_fname, ' ', v.vet_lname) AS vet_name, p.photo, r.reservation_date, r.reservation_time, r.treatment_price 
-                        FROM reservations r 
-                        INNER JOIN pet p ON r.id_pet = p.id_pet
-                        INNER JOIN users u ON u.id_user = p.id_user 
-                        INNER JOIN vet v ON r.id_vet = r.id_vet
-                        WHERE u.id_user = :id_user";
-$query_treatments = $pdo->prepare($sql_treatments);
-$query_treatments->bindParam(':id_user', $id_user, PDO::PARAM_STR);
-$query_treatments->execute();
-$results_treatments = $query_treatments->fetchAll(PDO::FETCH_OBJ);
 ?>
 
 <div class="container my-5">
@@ -120,8 +110,6 @@ $results_treatments = $query_treatments->fetchAll(PDO::FETCH_OBJ);
                         <h5 class="card-title"><?= $result->pet_name ?></h5>
                         <p>Izabrani lekar: <?= $result->id_vet ?></p>
                         <a href="#" class="btn btn-primary" id="editPet">Pet Card</a><br>
-<!--                        <a href="edit_profile.php?id_pet=--><?php //= $result->id_pet ?><!--" class="btn btn-primary popup">Edit profile</a><br>-->
-<!--                        <a href="schedule_treatment.php?id_pet=--><?php //= $result->id_pet ?><!--" class="btn btn-primary">Book procedure</a>-->
                         <!-- Edit Profile Form -->
                         <form action="edit_profile.php" method="POST" style="display:inline;">
                             <input type="hidden" name="id_pet" value="<?= htmlspecialchars($result->id_pet) ?>">
@@ -129,11 +117,6 @@ $results_treatments = $query_treatments->fetchAll(PDO::FETCH_OBJ);
                         </form>
                         <br>
 
-                        <!-- Schedule Treatment Form -->
-                        <form action="schedule_treatment.php" method="POST" style="display:inline;">
-                            <input type="hidden" name="id_pet" value="<?= htmlspecialchars($result->id_pet) ?>">
-                            <button type="submit" class="btn btn-primary">Book procedure</button>
-                        </form>
                     </div>
                 </div>
             </div>
@@ -141,23 +124,6 @@ $results_treatments = $query_treatments->fetchAll(PDO::FETCH_OBJ);
     </div>
 </div>
 
-<div class="container-fluid my-5">
-    <h1>Scheduled treatments:</h1>
-    <div class="row">
-        <?php foreach ($results_treatments as $result) : ?>
-            <div class="col-4 my-5">
-                <img src="photos/uploadsPet/<?= $result->photo ?>" alt="Pet Image" width="200" height="100"><br><br>
-                <p name="Petname">Pet name: <?= $result->pet_name ?></p>
-                <p name="Vetname">Vet name: <?= $result->vet_name ?></p>
-                <p name="date">Date: <?= $result->reservation_date ?></p>
-                <p name="time">Time: <?= $result->reservation_time ?></p>
-                <p name="price">Price: <?= $result->treatment_price ?></p>
-                <button class="btn btn-primary" id="cancel">Cancel treatment</button>
-                <hr>
-            </div>
-        <?php endforeach; ?>
-    </div>
-</div>
     <?php
 
 } elseif ($id_vet){
@@ -178,7 +144,7 @@ $results_treatments = $query_treatments->fetchAll(PDO::FETCH_OBJ);
                     <img class="card-img-top" src="photos/uploadsPet/<?= $result->photo ?>" alt="Card image">
                     <div class="card-body">
                         <h5 class="card-title"><?= $result->pet_name ?></h5>
-                        <p>Chosen Vet: <?= $result->id_vet ?></p>
+                        <p>Izabrani lekar: <?= $result->id_vet ?></p>
                         <a href="#" class="btn btn-primary" id="editPet">Pet Card</a><br>
                         <form action="edit_profile.php" method="POST" style="display:inline;">
                             <input type="hidden" name="id_pet" value="<?= htmlspecialchars($result->id_pet) ?>">

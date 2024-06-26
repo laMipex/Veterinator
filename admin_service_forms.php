@@ -80,7 +80,7 @@ if ($action == 'insert') {
         ':duration' => $duration,
         ':price' => $price,
         ':discount' => $discount,
-        ':photo' => $photo['name']
+        ':photo' => $new_file_name
     ]);
     echo "Service inserted successfully.";
 }
@@ -158,7 +158,7 @@ if ($action == 'update') {
         ':price' => $price,
         ':discount' => $discount,
         ':id_service' => $id_service,
-        ':photo' => $photo['name']
+        ':photo' => $new_file_name
     ];
 
     $query->execute($params);

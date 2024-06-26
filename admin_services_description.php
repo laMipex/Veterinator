@@ -58,22 +58,22 @@ require "parts/functions.php";
             if ($query->rowCount() > 0) {
                 foreach ($results as $result) {
                     echo '
-                    <div class="col-12 col-md-6 col-lg-4 my-3">
-                        <div class="card h-100 service-item" data-id="'.$result->id_service.'">
-                            <img src="photos/uploads/' . $result->photo . '" class="card-img-top" alt="Service Image">
-                            <div class="card-body">
-                                <h5 class="card-title">' . $result->service_name . '</h5>
-                                <p class="card-text">' . $result->service_description . '</p>
-                                <p class="card-text"><strong>Duration:</strong> ' . $result->service_duration . '</p>
-                                <p class="card-text"><strong>Price:</strong> ' . $result->price . '</p>
-                                <p class="card-text"><strong>Discount:</strong> ' . $result->discount . '</p>
-                            </div>
-                            <div class="card-footer d-flex justify-content-between">
-                                <button class="btn btn-primary updateBtn" data-bs-toggle="modal" data-bs-target="#updateModal">Update</button>
-                                <button class="btn btn-danger deleteBtn" data-bs-toggle="modal" data-bs-target="#deleteModal">Delete</button>
-                            </div>
+                <div class="col-12 col-md-6 col-lg-4 my-3">
+                    <div class="card h-100 service-item"  data-id="'.$result->id_service.'">
+                        <img src="photos/uploads/' .$result->photo. '" class="card-img-top" alt="Service Image">
+                        <div class="card-body" >
+                            <h5 class="service-name">' . $result->service_name . '</h5>
+                            <p class="service_description">' . $result->service_description . '</p>
+                            <p class="card-text"><i>Duration:</i> ' . $result->service_duration . '</p>
+                                <p class="card-text"><i>Price:</i> ' . $result->price . '</p>
+                                <p class="card-text"><i>Discount:</i> ' . $result->discount . '</p>
                         </div>
-                    </div>';
+                        <div class="card-footer d-flex justify-content-between">
+                            <button class="btn btn-primary updateBtn" data-bs-toggle="modal" data-bs-target="#updateModal">Update</button>
+                            <button class="btn btn-danger deleteBtn" data-bs-toggle="modal" data-bs-target="#deleteModal">Delete</button>
+                        </div>
+                    </div>
+                </div>';
                 }
             }
             ?>
@@ -133,27 +133,27 @@ require "parts/functions.php";
             </div>
             <div class="modal-body">
                 <form id="updateForm" method="post" enctype="multipart/form-data">
-                    <input type="hidden" name="id_service" id="updateIdService">
+                    <input type="hidden" id="updateIdService" name="id_service" >
                     <input type="hidden" name="action" value="update">
                     <div class="mb-3">
                         <label for="updateName" class="form-label">Service Name</label>
-                        <input type="text" class="form-control" id="updateName" name="service_name" required>
+                        <input type="text" class="form-control" id="updateName" name="service_name">
                     </div>
                     <div class="mb-3">
                         <label for="updateDescription" class="form-label">Service Description</label>
-                        <textarea class="form-control" id="updateDescription" name="service_description" required></textarea>
+                        <textarea class="form-control" id="updateDescription" name="service_description"></textarea>
                     </div>
                     <div class="mb-3">
                         <label for="updateDuration" class="form-label">Service Duration</label>
-                        <input type="text" class="form-control" id="updateDuration" name="service_duration" required>
+                        <input type="text" class="form-control" id="updateDuration" name="service_duration">
                     </div>
                     <div class="mb-3">
                         <label for="updatePrice" class="form-label">Service Price</label>
-                        <input type="number" class="form-control" id="updatePrice" name="service_price" required>
+                        <input type="text" class="form-control" id="updatePrice" name="service_price">
                     </div>
                     <div class="mb-3">
                         <label for="updateDiscount" class="form-label">Service Discount</label>
-                        <input type="number" class="form-control" id="updateDiscount" name="service_discount" required>
+                        <input type="text" class="form-control" id="updateDiscount" name="service_discount">
                     </div>
                     <div class="mb-3">
                         <label for="updatePhoto" class="form-label">Service Photo</label>
