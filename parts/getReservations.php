@@ -15,11 +15,9 @@ if (isset($data['vet_id']) && isset($data['reservation_date'])) {
     $query->bindParam(':vet_id', $vet_id, PDO::PARAM_INT);
     $query->bindParam(':reservation_date', $reservation_date, PDO::PARAM_STR);
 
-
     try {
         $query->execute();
         $result = $query->fetchAll(PDO::FETCH_ASSOC);
-
 
         if ($result) {
             echo json_encode(['status' => 'success', 'reservations' => $result]);
@@ -34,8 +32,4 @@ if (isset($data['vet_id']) && isset($data['reservation_date'])) {
     http_response_code(400);
     echo json_encode(['status' => 'error', 'message' => 'Invalid request.']);
 }
-
-
-
-
-
+?>

@@ -10,21 +10,22 @@ header("Content-Type: application/json");
 $data = json_decode(stripslashes(file_get_contents("php://input")), true);
 
 $id_service = $data['id_service'] ?? '';
+$id_pet = $data['id_pet'] ?? '';
 $id_vet = $data['id_vet'] ?? '';
 $date = $data['reservation_date'] ?? '';
 $time = $data['reservation_time'] ?? '';
-$price = $data['treatment_price'] ?? '';
+$price = $data['price'] ?? '';
 
-$id_pet = $_SESSION['id_pet'] ?? '';
+
 
 $error = false;
 $responseMessage = "Data added successfully!";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-    if (empty($id_service) || empty($id_vet) || empty($date) || empty($time) || empty($price) || empty($id_pet)) {
+    /*if (empty($id_service) || empty($id_vet) || empty($date) || empty($time) || empty($price) || empty($id_pet)) {
         $error = true;
-    }
+    }*/
 
     if ($error) {
         $responseMessage = "You must fill all the fields!!";
@@ -73,37 +74,38 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $query3->execute();
             $user_email = $query3 ->fetch(PDO::FETCH_OBJ)->user_email;
             //if (existsUser($pdo, $user_email)){
-                $code = createCode(6);
-                if ($code) {
+            $code = createCode(6);
+            if ($code) {
 
-                    try {
-                        $body = "Hello $user_email. Your reservation is submited. Bring this code when you bring your pet for treatment. <b>$code</b>";
-                        sendEmail($pdo, $user_email, $emailMessages['inesrtReservation'], $body, $id_user);
-                        //$error = true;
-                        $responseMessage = "Mail with code has been sent";
-                    } catch (Exception $e) {
-                        error_log("****************************************");
-                        error_log($e->getMessage());
-                        error_log("file:" . $e->getFile() . " line:" . $e->getLine());
-                        $error = true;
-                        $responseMessage = "We could not send email";
-                    }
-
-
-                    // Umetanje nove rezervacije
-                    $sql = "INSERT INTO reservations(id_pet, id_service, id_vet, reservation_date, reservation_time, treatment_price,code, reservation_added, service_duration) VALUES (:id_pet, :id_service, :id_vet, :reservation_date, :reservation_time, :price, :code, now(), :service_duration)";
-                    $query = $pdo->prepare($sql);
-                    $query->bindParam(':id_pet', $id_pet, PDO::PARAM_STR);
-                    $query->bindParam(':id_service', $id_service, PDO::PARAM_STR);
-                    $query->bindParam(':id_vet', $id_vet, PDO::PARAM_STR);
-                    $query->bindParam(':reservation_date', $date, PDO::PARAM_STR);
-                    $query->bindParam(':reservation_time', $time, PDO::PARAM_STR);
-                    $query->bindParam(':price', $price, PDO::PARAM_INT);
-                    $query->bindParam(':service_duration', $duration, PDO::PARAM_STR);
-                    $query->bindParam(':code', $code, PDO::PARAM_STR);
-
-                    $query->execute();
+                try {
+                    $body = "Hello $user_email. Your reservation is submited. Bring this code when you bring your pet for treatment. <b>$code</b>";
+                    sendEmail($pdo, $user_email, $emailMessages['inesrtReservation'], $body, $id_user);
+                    //$error = true;
+                    $responseMessage = "Mail with code has been sent";
+                } catch (Exception $e) {
+                    error_log("****************************************");
+                    error_log($e->getMessage());
+                    error_log("file:" . $e->getFile() . " line:" . $e->getLine());
+                    $error = true;
+                    $responseMessage = "We could not send email";
                 }
+
+
+                // Umetanje nove rezervacije
+                $sql = "INSERT INTO reservations(id_pet, id_service, id_vet, reservation_date, reservation_time, treatment_price,code, reservation_added, service_duration) VALUES (:id_pet, :id_service, :id_vet, :reservation_date, :reservation_time, :price, :code, now(), :service_duration)";
+                $query = $pdo->prepare($sql);
+                $query->bindParam(':id_pet', $id_pet, PDO::PARAM_STR);
+                $query->bindParam(':id_service', $id_service, PDO::PARAM_STR);
+                $query->bindParam(':id_vet', $id_vet, PDO::PARAM_STR);
+                $query->bindParam(':reservation_date', $date, PDO::PARAM_STR);
+                $query->bindParam(':reservation_time', $time, PDO::PARAM_STR);
+                $query->bindParam(':price', $price, PDO::PARAM_INT);
+                $query->bindParam(':service_duration', $duration, PDO::PARAM_STR);
+                $query->bindParam(':code', $code, PDO::PARAM_STR);
+
+                $query->execute();
+                // Set a session variable to indicate form submission
+            }
             //}
 
 

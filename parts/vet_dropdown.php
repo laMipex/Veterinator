@@ -46,9 +46,5 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !empty($id_service)) {
     ];
 }
 
-
-
-
-
 echo json_encode($response);
 ?>
