@@ -1,3 +1,4 @@
+<script src="js/nav_user.js"></script>
 <nav class="navbar navbar-expand-md">
     <div class="container-fluid">
         <img class="logo" src="photos/index_photos/vet.png" alt="logo">
@@ -19,7 +20,8 @@
             <ul class="navbar-nav mb-2 mb-ls-0">
                 <li class="nav-item dropdown">
                     <a class="nav-link" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        <i class="bi bi-person-circle"></i>
+                        <img id="profile_photo" src="" alt="Profile Photo" width="50" height="50" style="border-radius: 50px">
+<!--                        <i class="bi bi-person-circle"></i>-->
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuLink">
                         <li><a class="dropdown-item" href="edit_user.php">Profile</a></li>
@@ -31,3 +33,4 @@
         </div>
     </div>
 </nav>
+
