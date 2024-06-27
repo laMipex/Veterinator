@@ -12,7 +12,8 @@ INNER JOIN pet p ON p.id_pet = r.id_pet
 INNER JOIN users u ON p.id_user = u.id_user
 INNER JOIN vet v ON v.id_vet = r.id_vet
 INNER JOIN services s ON r.id_service = s.id_service
-WHERE r.id_vet = :id_vet AND DATE(r.reservation_date) = CURDATE() AND r.code_verified = 0";
+WHERE r.id_vet = :id_vet AND DATE(r.reservation_date) = CURDATE() AND r.code_verified = 0
+ORDER BY r.reservation_time ASC";
 
 $query2 = $pdo->prepare($sql2);
 $query2->bindParam(':id_vet', $id_vet, PDO::PARAM_STR);
@@ -42,7 +43,7 @@ if ($query2->rowCount() > 0) {
             <div class="clean">         
                 <input type="text" id="codeInput" style="width: 100px;">    
                 </div>         
-                <input type="hidden" id="code" value="' . $result->code . '">  
+                <input type="hidden" id="id_res" value="' . $result->id_reservation . '">  
             </td>
             <td><button type="button" id="submit">Submit</button></td>
         </tr>';
