@@ -29,22 +29,6 @@ $id_vet = $_SESSION['id_vet'] ?? "";
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-    <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const editButton = document.getElementById('edit-button');
-        const editModal = new bootstrap.Modal(document.getElementById('editModal'));
-        const saveButton = document.getElementById('save-button');
-        const editForm = document.getElementById('editForm');
-
-        editButton.addEventListener('click', function () {
-            editModal.show();
-        });
-
-        saveButton.addEventListener('click', function () {
-            editForm.submit();
-        });
-    });
-    </script>
 </head>
 <body data-bs-spy="scroll" data-bs-target=".navbar" data-bs-offset="50">
 
@@ -52,30 +36,179 @@ $id_vet = $_SESSION['id_vet'] ?? "";
 
 <?php
 
-$query = $pdo->prepare("SELECT * FROM users WHERE id_user = :id");
-$query->execute(['id' => $id_user]);
-$user = $query->fetch();
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $user_fname = $_POST['user_fname'];
-    $user_lname = $_POST['user_lname'];
-    $user_email = $_POST['user_email'];
-    $phone = $_POST['phone'];
-    $age = $_POST['age'];
-
-    $updateUQuery = $pdo->prepare("UPDATE users SET user_fname = :user_fname, user_lname = :user_lname, user_email = :user_email, phone = :phone, age = :age WHERE id_user = :id");
-    $updateUQuery->execute([
-        'user_fname' => $user_fname,
-        'user_lname' => $user_lname,
-        'user_email' => $user_email,
-        'phone' => $phone,
-        'age' => $age,
-        'id' => $id_user
-    ]);
-
+    $query = $pdo->prepare("SELECT * FROM users WHERE id_user = :id");
     $query->execute(['id' => $id_user]);
     $user = $query->fetch();
-}
+
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+        $old_password = $_POST['edit_user_old_pass'] ?? null;
+        $new_password = $_POST['edit_user_new_pass'] ?? null;
+        $user_fname = $_POST['user_fname'];
+        $user_lname = $_POST['user_lname'];
+        $user_email = $_POST['user_email'];
+        $phone = $_POST['phone'];
+        $age = $_POST['age'];
+
+        $name = "";
+        $parts = explode('@', $user_email);
+        if (count($parts) > 1) {
+            $name = $parts[0]; // Deo pre @
+        } else {
+            echo 'Invalid email format';
+            exit;
+        }
+
+        if ($old_password && $new_password)
+        {
+            $query2 = $pdo->prepare("SELECT user_password FROM users WHERE id_user = :id");
+            $query2->execute(['id' => $id_user]);
+            $user2 = $query2->fetch();
+            if (password_verify($old_password, $user2['user_password'])) {
+                $new_password_hashed = password_hash($new_password, PASSWORD_DEFAULT);
+                $updatePasswordQuery = $pdo->prepare("UPDATE users SET user_password = :user_password, user_fname = :user_fname, user_lname = :user_lname, user_email = :user_email, phone = :phone, age = :age WHERE id_user = :id");
+                $updatePasswordQuery->execute([
+                    'user_password' => $new_password_hashed,
+                    'user_fname' => $user_fname,
+                    'user_lname' => $user_lname,
+                    'user_email' => $user_email,
+                    'phone' => $phone,
+                    'age' => $age,
+                    'id' => $id_user
+                ]);
+                echo 'Password updated successfully';
+              /*  $query->execute(['id' => $user]);
+                $user = $query->fetch();*/
+            } else {
+                echo "Incorrect old password";
+                $query->execute(['id' => $user]);
+                $user = $query->fetch();
+            }
+        }
+
+        else if (isset($_FILES['file']) && $_FILES['file']['error'] === UPLOAD_ERR_OK && $old_password && $new_password)
+        {
+            $edit_photo = $_FILES['file'];
+            $file_temp = $edit_photo['tmp_name'];
+            $file_name = $edit_photo['name'];
+
+            if (!exif_imagetype($file_temp)) {
+                echo 'File is not a picture!!';
+                $query->execute(['id' => $user]);
+                $user = $query->fetch();
+                exit;
+            }
+
+            $ext_temp = explode(".", $file_name);
+            $extension = end($ext_temp);
+            $new_file_name = Date("YmdHis") . "-$name.$extension";
+            $upload = "photos/uploads/$new_file_name";
+
+            if (!file_exists($upload)) {
+                if (!move_uploaded_file($file_temp, $upload)) {
+                    echo 'Error moving uploaded file!';
+                    $query->execute(['id' => $id_user]);
+                    $user = $query->fetch();
+                    exit;
+                }
+            } else {
+                echo 'File with this name already exists!';
+                $query->execute(['id' => $id_user]);
+                $user = $query->fetch();
+                exit;
+            }
+
+            $query2 = $pdo->prepare("SELECT user_password FROM users WHERE id_user = :id");
+            $query2->execute(['id' => $id_user]);
+            $user2 = $query2->fetch();
+            if (password_verify($old_password, $user2['user_password'])) {
+                $new_password_hashed = password_hash($new_password, PASSWORD_DEFAULT);
+                $updatePasswordQuery = $pdo->prepare("UPDATE users SET user_password = :user_password, user_fname = :user_fname, user_lname = :user_lname, user_email = :user_email, phone = :phone, age = :age, photo = :photo  WHERE id_user = :id");
+                $updatePasswordQuery->execute([
+                    'user_password' => $new_password_hashed,
+                    'user_fname' => $user_fname,
+                    'user_lname' => $user_lname,
+                    'user_email' => $user_email,
+                    'phone' => $phone,
+                    'age' => $age,
+                    'photo' => $new_file_name,
+                    'id' => $id_user
+                ]);
+                echo '"Password updated successfully");';
+                $query->execute(['id' => $user]);
+                $user = $query->fetch();
+            } else {
+                echo "Incorrect old password";
+                $query->execute(['id' => $user]);
+                $user = $query->fetch();
+            }
+
+        }
+        elseif(isset($_FILES['file']) && $_FILES['file']['error'] === UPLOAD_ERR_OK )
+        {
+
+            $edit_photo = $_FILES['file'];
+            $file_temp = $edit_photo['tmp_name'];
+            $file_name = $edit_photo['name'];
+
+            if (!exif_imagetype($file_temp)) {
+                echo 'File is not a picture!!';
+                $query->execute(['id' => $id_user]);
+                $user = $query->fetch();
+                exit;
+            }
+
+            $ext_temp = explode(".", $file_name);
+            $extension = end($ext_temp);
+            $new_file_name = Date("YmdHis") . "-$name.$extension";
+            $upload = "photos/uploads/$new_file_name";
+
+            if (!file_exists($upload)) {
+                if (!move_uploaded_file($file_temp, $upload)) {
+                    echo 'Error moving uploaded file!';
+                    $query->execute(['id' => $id_user]);
+                    $user = $query->fetch();
+                    exit;
+                }
+            } else {
+                echo 'File with this name already exists!';
+                $query->execute(['id' => $id_user]);
+                $user = $query->fetch();
+                exit;
+            }
+
+            $updateUQuery = $pdo->prepare("UPDATE users SET user_fname = :user_fname, user_lname = :user_lname, user_email = :user_email, phone = :phone, age = :age, photo = :photo  WHERE id_user = :id");
+            $updateUQuery->execute([
+                'user_fname' => $user_fname,
+                'user_lname' => $user_lname,
+                'user_email' => $user_email,
+                'phone' => $phone,
+                'age' => $age,
+                'photo' => $new_file_name,
+                'id' => $id_user
+            ]);
+            echo 'Updated successfully';
+            $query->execute(['id' => $id_user]);
+            $user = $query->fetch();
+        }
+
+
+        else {
+            $updateUQuery = $pdo->prepare("UPDATE users SET user_fname = :user_fname, user_lname = :user_lname, user_email = :user_email, phone = :phone, age = :age WHERE id_user = :id");
+            $updateUQuery->execute([
+                'user_fname' => $user_fname,
+                'user_lname' => $user_lname,
+                'user_email' => $user_email,
+                'phone' => $phone,
+                'age' => $age,
+                'id' => $id_user
+            ]);
+
+            $query->execute(['id' => $id_user]);
+            $user = $query->fetch();
+        }
+
+    }
 ?>
 
 <div class="container">
@@ -84,7 +217,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <h2>User Profile</h2>
             </div>
             <div class="profileContent">
-                <form id="profileForm" method="post">
+                <form id="profileForm" method="post" >
                     <div class="form-group row">
                         <label for="user_fname" class="col-sm-3 col-form-label">First Name</label>
                         <div class="col-sm-9">
@@ -115,6 +248,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <input type="text" readonly class="form-control" id="age" name="age" value="<?php echo ($user['age']); ?>">
                         </div>
                     </div>
+                    <div class="form-group row">
+                        <label for="photo" class="col-sm-3 col-form-label">Photo</label>
+                        <div class="col-sm-9">
+                            <img id="photo" src="photos/uploads/<?php echo ($user['photo']); ?>" alt="Profile Photo" width="100" height="100" style="border-radius: 50px">
+                        </div>
+                    </div>
                 </form>
             </div>
             <div class="text-center">
@@ -134,7 +273,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form id="editForm" method="post">
+                    <form id="editForm" method="post" enctype="multipart/form-data">
                         <div class="form-group">
                             <label for="edit_user_fname">First Name</label>
                             <input type="text" class="form-control" id="edit_user_fname" name="user_fname" value="<?php echo ($user['user_fname']); ?>">
@@ -148,12 +287,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <input type="email" class="form-control" id="edit_user_email" name="user_email" value="<?php echo ($user['user_email']); ?>">
                         </div>
                         <div class="form-group">
+                            <label for="edit_user_old_pass">Old Password</label>
+                            <input type="password" class="form-control" id="edit_user_old_pass" name="edit_user_old_pass">
+                        </div>
+                        <div class="form-group" style="display: none">
+                            <label for="edit_user_new_pass">New Password</label>
+                            <input type="password" class="form-control" id="edit_user_new_pass" name="edit_user_new_pass">
+                        </div>
+
+                        <div class="form-group">
                             <label for="edit_phone">Phone</label>
                             <input type="text" class="form-control" id="edit_phone" name="phone" value="<?php echo ($user['phone']); ?>">
                         </div>
                         <div class="form-group">
                             <label for="edit_age">Age</label>
                             <input type="text" class="form-control" id="edit_age" name="age" value="<?php echo ($user['age']); ?>">
+                        </div>
+                        <div class="form-group">
+                            <label for="edit_photo" class="form-label">Photo</label>
+                            <img src="photos/uploads/<?php echo ($user['photo']); ?>" alt="Profile Photo" width="70" height="70" style="border-radius: 50px">
+                            <input type="file" class="form-control" id="edit_photo" name="file">
+
                         </div>
                     </form>
                 </div>
