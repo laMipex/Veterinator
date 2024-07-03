@@ -1,0 +1,44 @@
+General Check-Up
+Description: Routine health examinations for pets to ensure they are healthy.
+Duration: 30 minutes
+Price: $50
+
+Vaccinations
+Description: Administering vaccines to prevent diseases like rabies, distemper, and parvovirus.
+Duration: 20 minutes
+Price: $25
+
+Dental Cleaning
+Description: Professional teeth cleaning to prevent dental diseases and maintain oral health.
+Duration: 45 minutes
+Price: $100
+
+Spay/Neuter Surgery
+Description: Surgical procedures to sterilize pets and prevent unwanted litters.
+Duration: 2 hours
+Price: $200
+
+Microchipping
+Description: Implanting a microchip under the pet's skin for identification purposes.
+Duration: 15 minutes
+Price: $40
+
+Nutritional Counseling
+Description: Providing dietary advice and customized meal plans for pets.
+Duration: 30 minutes
+Price: $30
+
+Emergency Care
+Description: Immediate medical attention for pets in critical condition.
+Duration: Variable
+Price: $150
+
+Parasite Control
+Description: Treatments to prevent and eliminate parasites like fleas, ticks, and worms.
+Duration: 20 minutes
+Price: $20
+
+Behavioral Consultation
+Description: Assessing and addressing behavioral issues in pets.
+Duration: 1 hour
+Price: $75
